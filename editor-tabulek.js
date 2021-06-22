@@ -3,8 +3,8 @@ let activeCell;
 
 //create table and buttons
 window.onload = () => {
-    createDefaultTable(3, 5);
     createDefaultButtons();
+    createDefaultTable(3, 5);    
 }
 
 
@@ -26,6 +26,18 @@ function createDefaultTable(rows, columns) {
             tr.appendChild(createCell());
         }
     }
+}
+
+/**
+ * function for creating main buttons
+ */
+function createDefaultButtons() {
+    createAndInsertButton("Přidat řádek dolů", document.body).onclick = addRowBelow;
+    createAndInsertButton("Přidat řádek nahoru", document.body).onclick = addRowAbove;
+    createAndInsertButton("Přidat sloupec vlevo", document.body).onclick = addColumnLeft;
+    createAndInsertButton("Přidat sloupec vpravo", document.body).onclick = addColumnRight;
+    createAndInsertButton("Odstranit řádek", document.body).onclick = deleteRow;
+    createAndInsertButton("Odstranit sloupec", document.body).onclick = deleteColumn;
 }
 
 /**
@@ -54,24 +66,12 @@ function createCell() {
  * @returns new button
  */
 function createAndInsertButton(description, parent) {
-    let btnDiv = document.createElement("div");
+    //let btnDiv = document.createElement("div");
     let btn = document.createElement("button");
     btn.textContent = description;
-    btnDiv.appendChild(btn);
-    parent.appendChild(btnDiv);
+    //btnDiv.appendChild(btn);
+    parent.appendChild(btn);
     return btn;
-}
-
-/**
- * function for creating main buttons
- */
-function createDefaultButtons() {
-    createAndInsertButton("Přidat řádek dolů", document.body).onclick = addRowBelow;
-    createAndInsertButton("Přidat řádek nahoru", document.body).onclick = addRowAbove;
-    //createAndInsertButton("Přidat sloupec vlevo", document.body);
-    //createAndInsertButton("Přidat sloupec vpravo", document.body);
-    //createAndInsertButton("Odstranit řádek", document.body);
-    //createAndInsertButton("Odstranit sloupec", document.body);
 }
 
 /**
@@ -97,7 +97,7 @@ function createRow() {
  * @returns index of active row
  */
 function findActiveCellRowIndex() {
-    let searchedArea = table.childNodes;
+    let searchedArea = table.childNodes; //table.childNodes returns array of table rows
     let searchedElement = activeCell.parentElement.parentElement //active cell is input, first parent is td, second parent is tr
     return Array.prototype.indexOf.call(searchedArea, searchedElement);
 }
@@ -134,3 +134,45 @@ function findActiveCellColumnIndex() {
     return Array.prototype.indexOf.call(cellsInRow, td);
 }
 
+/**
+ * function for adding a column to the left from the active cell
+ */
+function addColumnLeft() {
+    let activeIndex = findActiveCellColumnIndex();
+    for (let i = 0; i< table.childNodes.length; i++) {
+        table.childNodes[i].insertBefore(createCell(), table.childNodes[i].childNodes[activeIndex])
+    }
+}
+
+/**
+ * function for adding a column to the right from the active cell
+ */
+function addColumnRight() {
+    let activeIndex = findActiveCellColumnIndex();
+    for (let i = 0; i< table.childNodes.length; i++) {
+        if(table.childNodes[i].childNodes[activeIndex]==table.childNodes[i].lastElementChild) {
+            table.childNodes[i].appendChild(createCell());
+        }
+        else {
+            table.childNodes[i].insertBefore(createCell(), table.childNodes[i].childNodes[activeIndex+1])
+        }
+    }
+}
+
+/**
+ * function for deleting a row of an active cell
+ */
+function deleteRow() {
+    let activeIndex = findActiveCellColumnIndex();
+    table.removeChild(table.childNodes[activeIndex]);
+}
+
+/**
+ * function for deleting a column of an active cell
+ */
+function deleteColumn() {
+    let activeIndex = findActiveCellColumnIndex();
+    for (let i = 0; i<table.childNodes.length; i++) {
+        table.childNodes[i].removeChild(table.childNodes[i].childNodes[activeIndex]);
+    }
+}

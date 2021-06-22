@@ -2,8 +2,10 @@ table {
     border-spacing:0;
     border: 1px solid black;
     width: 900px;
+    margin-left: 10px;
+    
 }
-table, table td {
+table td {
     padding:0;
     margin: 0;
 }
@@ -20,10 +22,16 @@ table td input {
 }
 
 input:focus {
-    background-color: honeydew;
+    background-color:rgb(201, 212, 178);
 }
 
 button {
     padding: 10px;
     margin: 10px;
+}
+
+h1 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: olivedrab;
+    margin-left: 10px;
 }
